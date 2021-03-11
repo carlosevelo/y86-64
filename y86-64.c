@@ -7,73 +7,287 @@ const int MAX_MEM_SIZE  = (1 << 13);
 
 void fetchStage(int *icode, int *ifun, int *rA, int *rB, wordType *valC, wordType *valP) {
   //Series of if statements (icode)
-  *icode = getByteFromMemory(getPC());
-  if (*icode == 0x00) { //Halt
+  byteType mask = 0x01;
+  byteType pcByte = getByteFromMemory(getPC());
+  *icode = pcByte >> 4;
+
+  if (*icode == HALT) { //Halt 1 byte
+    *valP = getPC() + 1;
+    return;
+  }
+  else if (*icode == NOP) { //No op 1 byte
+    *valP = getPC() + 1;
 
   }
-  else if (*icode == 0x00) {
+  else if (*icode == RRMOVQ) { //rrmovq 2 bytes
+    *valP = getPC() + 2;
 
   }
-  else if (*icode == 0x00) {
-    
+  else if (*icode == IRMOVQ) { //irmovq 10 bytes
+    *valP = getPC() + 10;
+
   }
-  else if (*icode == 0x00) {
-    
+  else if (*icode == RMMOVQ) { //rmmovq 10 bytes
+    *valP = getPC() + 10;
+
   }
-  else if (*icode == 0x00) {
-    
+  else if (*icode == MRMOVQ) { //mrmovq 10 bytes
+    *valP = getPC() + 10;
+
   }
-  else if (*icode == 0x00) {
-    
+  else if (*icode == OPQ) { //int op 2 bytes
+    *valP = getPC() + 2;
+    *ifun = pcByte && mask;
+
+    if (*ifun == ADD) {
+
+    }
+    else if (*ifun == SUB) {
+
+    }
+    else if (*ifun == XOR) {
+
+    }
+    else if (*ifun == AND) {
+
+    }
   }
-  else if (*icode == 0x00) {
-    
+  else if (*icode == JXX) { //jump 9 bytes
+    *valP = getPC() + 9;
+    *ifun = pcByte && mask;
+
   }
-  else if (*icode == 0x00) {
-    
+  else if (*icode == CALL) { //call 9 bytes
+    *valP = getPC() + 9;
+
   }
-  else if (*icode == 0x00) {
-    
+  else if (*icode == RET) { //ret 1 byte
+    *valP = getPC() + 1;
+
+  }
+  else if (*icode == PUSHQ) { //pushq 2 bytes
+    *valP = getPC() + 2;
+
+  }
+  else if (*icode == POPQ) { //popq 2 bytes
+    *valP = getPC() + 2;
+
   }
 }
 
 void decodeStage(int icode, int rA, int rB, wordType *valA, wordType *valB) {
- 
+  if (icode == HALT) { //Halt
+    return;
+  }
+  else if (icode == NOP) { //No op
+
+  }
+  else if (icode == RRMOVQ) { //rrmovq
+    
+  }
+  else if (icode == IRMOVQ) { //irmovq
+    
+  }
+  else if (icode == RMMOVQ) { //rmmovq
+    
+  }
+  else if (icode == MRMOVQ) { //mrmovq
+    
+  }
+  else if (icode == OPQ) { //int op
+    
+  }
+  else if (icode == JXX) { //jump
+    
+  }
+  else if (icode == CALL) { //call
+    
+  }
+  else if (icode == RET) { //ret
+    
+  }
+  else if (icode == PUSHQ) { //pushq
+    
+  }
+  else if (icode == POPQ) { //popq
+    
+  }
 }
 
 void executeStage(int icode, int ifun, wordType valA, wordType valB, wordType valC, wordType *valE, bool *Cnd) {
-  
+  if (icode == HALT) { //Halt
+    return;
+  }
+  else if (icode == NOP) { //No op
+
+  }
+  else if (icode == RRMOVQ) { //rrmovq
+    
+  }
+  else if (icode == IRMOVQ) { //irmovq
+    
+  }
+  else if (icode == RMMOVQ) { //rmmovq
+    
+  }
+  else if (icode == MRMOVQ) { //mrmovq
+    
+  }
+  else if (icode == OPQ) { //int op
+    
+  }
+  else if (icode == JXX) { //jump
+    
+  }
+  else if (icode == CALL) { //call
+    
+  }
+  else if (icode == RET) { //ret
+    
+  }
+  else if (icode == PUSHQ) { //pushq
+    
+  }
+  else if (icode == POPQ) { //popq
+    
+  }
 }
 
 void memoryStage(int icode, wordType valA, wordType valP, wordType valE, wordType *valM) {
- 
+  if (icode == HALT) { //Halt
+    return;
+  }
+  else if (icode == NOP) { //No op
+
+  }
+  else if (icode == RRMOVQ) { //rrmovq
+    
+  }
+  else if (icode == IRMOVQ) { //irmovq
+    
+  }
+  else if (icode == RMMOVQ) { //rmmovq
+    
+  }
+  else if (icode == MRMOVQ) { //mrmovq
+    
+  }
+  else if (icode == OPQ) { //int op
+    
+  }
+  else if (icode == JXX) { //jump
+    
+  }
+  else if (icode == CALL) { //call
+    
+  }
+  else if (icode == RET) { //ret
+    
+  }
+  else if (icode == PUSHQ) { //pushq
+    
+  }
+  else if (icode == POPQ) { //popq
+    
+  }
 }
 
 void writebackStage(int icode, wordType rA, wordType rB, wordType valE, wordType valM) {
- 
+  if (icode == HALT) { //Halt
+    return;
+  }
+  else if (icode == NOP) { //No op
+
+  }
+  else if (icode == RRMOVQ) { //rrmovq
+    
+  }
+  else if (icode == IRMOVQ) { //irmovq
+    
+  }
+  else if (icode == RMMOVQ) { //rmmovq
+    
+  }
+  else if (icode == MRMOVQ) { //mrmovq
+    
+  }
+  else if (icode == OPQ) { //int op
+    
+  }
+  else if (icode == JXX) { //jump
+    
+  }
+  else if (icode == CALL) { //call
+    
+  }
+  else if (icode == RET) { //ret
+    
+  }
+  else if (icode == PUSHQ) { //pushq
+    
+  }
+  else if (icode == POPQ) { //popq
+    
+  }
 }
 
 void pcUpdateStage(int icode, wordType valC, wordType valP, bool Cnd, wordType valM) {
-  
+  if (icode == HALT) { //Halt
+    setPC(valP);
+    return;
+  }
+  else if (icode == NOP) { //No op
+    return;
+  }
+  else if (icode == RRMOVQ) { //rrmovq
+    
+  }
+  else if (icode == IRMOVQ) { //irmovq
+    
+  }
+  else if (icode == RMMOVQ) { //rmmovq
+    
+  }
+  else if (icode == MRMOVQ) { //mrmovq
+    
+  }
+  else if (icode == OPQ) { //int op
+    
+  }
+  else if (icode == JXX) { //jump
+    
+  }
+  else if (icode == CALL) { //call
+    
+  }
+  else if (icode == RET) { //ret
+    
+  }
+  else if (icode == PUSHQ) { //pushq
+    
+  }
+  else if (icode == POPQ) { //popq
+    
+  }
 }
 
 void stepMachine(int stepMode) {
   /* FETCH STAGE */
-  int icode = 0, ifun = 0;
-  int rA = 0, rB = 0;
-  wordType valC = 0;
-  wordType valP = 0;
+  int icode = 0, ifun = 0; //intruction type
+  int rA = 0, rB = 0; //instruction registers
+  wordType valC = 0; //instruction value
+  wordType valP = 0; //next intruction address
  
   /* DECODE STAGE */
-  wordType valA = 0;
-  wordType valB = 0;
+  wordType valA = 0; //value from register A
+  wordType valB = 0; //value from register B
 
   /* EXECUTE STAGE */
-  wordType valE = 0;
-  bool Cnd = 0;
+  wordType valE = 0; //Resulting value
+  bool Cnd = 0; //Condition
 
   /* MEMORY STAGE */
-  wordType valM = 0;
+  wordType valM = 0; //Value read from memory
 
   fetchStage(&icode, &ifun, &rA, &rB, &valC, &valP);
   applyStageStepMode(stepMode, "Fetch", icode, ifun, rA, rB, valC, valP, valA, valB, valE, Cnd, valM);
