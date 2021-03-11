@@ -6,7 +6,35 @@
 const int MAX_MEM_SIZE  = (1 << 13);
 
 void fetchStage(int *icode, int *ifun, int *rA, int *rB, wordType *valC, wordType *valP) {
- 
+  //Series of if statements (icode)
+  *icode = getByteFromMemory(getPC());
+  if (*icode == 0x00) { //Halt
+
+  }
+  else if (*icode == 0x00) {
+
+  }
+  else if (*icode == 0x00) {
+    
+  }
+  else if (*icode == 0x00) {
+    
+  }
+  else if (*icode == 0x00) {
+    
+  }
+  else if (*icode == 0x00) {
+    
+  }
+  else if (*icode == 0x00) {
+    
+  }
+  else if (*icode == 0x00) {
+    
+  }
+  else if (*icode == 0x00) {
+    
+  }
 }
 
 void decodeStage(int icode, int rA, int rB, wordType *valA, wordType *valB) {
