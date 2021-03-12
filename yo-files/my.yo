@@ -1,5 +1,6 @@
 0x0000:                        | .align 8
 0x0000: 30f01900000000000000   | irmovq $25, %rax
 0x000a: 2001                   | rrmovq %rax, %rcx
-0x000c: 00                     | halt
+0x000c: 6001                   | addq %rax, %rcx
+0x000e: 00                     | halt
                                | 
