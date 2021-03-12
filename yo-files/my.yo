@@ -2,5 +2,7 @@
 0x0000: 30f01900000000000000   | irmovq $25, %rax
 0x000a: 2001                   | rrmovq %rax, %rcx
 0x000c: 6001                   | addq %rax, %rcx
-0x000e: 00                     | halt
+0x000e: 40120000000000000000   | rmmovq %rcx, (%rdx)
+0x0018: 50720000000000000000   | mrmovq (%rdx), %rdi
+0x0022: 00                     | halt
                                | 
