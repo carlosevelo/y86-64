@@ -43,21 +43,12 @@ void fetchStage(int *icode, int *ifun, int *rA, int *rB, wordType *valC, wordTyp
 
   }
   else if (*icode == OPQ) { //int op 2 bytes
-    *valP = getPC() + 2;
     *ifun = pcByte & mask;
-
-    if (*ifun == ADD) {
-
-    }
-    else if (*ifun == SUB) {
-
-    }
-    else if (*ifun == XOR) {
-
-    }
-    else if (*ifun == AND) {
-
-    }
+    pcByte = getByteFromMemory(getPC() + 1);
+    *rA = pcByte >> 4;
+    *rB = pcByte & mask;
+    *valP = getPC() + 2;
+    return;
   }
   else if (*icode == JXX) { //jump 9 bytes
     *valP = getPC() + 9;
@@ -103,7 +94,9 @@ void decodeStage(int icode, int rA, int rB, wordType *valA, wordType *valB) {
     
   }
   else if (icode == OPQ) { //int op
-    
+    *valA = getRegister(rA);
+    *valB = getRegister(rB);
+    return;
   }
   else if (icode == JXX) { //jump
     
@@ -144,7 +137,19 @@ void executeStage(int icode, int ifun, wordType valA, wordType valB, wordType va
     
   }
   else if (icode == OPQ) { //int op
-    
+    if (ifun == ADD) {
+      *valE = valB + valA;
+    }
+    else if (ifun == SUB) {
+      *valE = valB - valA;
+    }
+    else if (ifun == XOR) {
+      *valE = valB ^ valA;
+    }
+    else if (ifun == AND) {
+      *valE = valB & valA;
+    }
+    //Set CC?
   }
   else if (icode == JXX) { //jump
     
@@ -183,7 +188,7 @@ void memoryStage(int icode, wordType valA, wordType valP, wordType valE, wordTyp
     
   }
   else if (icode == OPQ) { //int op
-    
+    return;
   }
   else if (icode == JXX) { //jump
     
@@ -224,7 +229,8 @@ void writebackStage(int icode, wordType rA, wordType rB, wordType valE, wordType
     
   }
   else if (icode == OPQ) { //int op
-    
+    setRegister(rB, valE);
+    return;
   }
   else if (icode == JXX) { //jump
     
@@ -253,6 +259,7 @@ void pcUpdateStage(int icode, wordType valC, wordType valP, bool Cnd, wordType v
   }
   else if (icode == RRMOVQ) { //rrmovq
     setPC(valP);
+    return;
   }
   else if (icode == IRMOVQ) { //irmovq
     setPC(valP);
@@ -266,6 +273,7 @@ void pcUpdateStage(int icode, wordType valC, wordType valP, bool Cnd, wordType v
   }
   else if (icode == OPQ) { //int op
     setPC(valP);
+    return;
   }
   else if (icode == JXX) { //jump
     
