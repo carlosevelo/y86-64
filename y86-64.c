@@ -65,12 +65,13 @@ void fetchStage(int *icode, int *ifun, int *rA, int *rB, wordType *valC, wordTyp
     return;
   }
   else if (*icode == CALL) { //call 9 bytes
+    *valC = getWordFromMemory(getPC() + 1);
     *valP = getPC() + 9;
-
+    return;
   }
   else if (*icode == RET) { //ret 1 byte
     *valP = getPC() + 1;
-
+    return;
   }
   else if (*icode == PUSHQ) { //pushq 2 bytes
     pcByte = getByteFromMemory(getPC() + 1);
@@ -120,10 +121,13 @@ void decodeStage(int icode, int rA, int rB, wordType *valA, wordType *valB) {
     return;
   }
   else if (icode == CALL) { //call
-    
+    *valB = getRegister(RSP);
+    return;
   }
   else if (icode == RET) { //ret
-    
+    *valA = getRegister(RSP);
+    *valB = getRegister(RSP);
+    return;
   }
   else if (icode == PUSHQ) { //pushq
     *valA = getRegister(rA);
@@ -198,10 +202,12 @@ void executeStage(int icode, int ifun, wordType valA, wordType valB, wordType va
     return;
   }
   else if (icode == CALL) { //call
-    
+    *valE = valB - 8;
+    return;
   }
   else if (icode == RET) { //ret
-    
+    *valE = valB + 8;
+    return;
   }
   else if (icode == PUSHQ) { //pushq
     *valE = valB - 8;
@@ -241,10 +247,12 @@ void memoryStage(int icode, wordType valA, wordType valP, wordType valE, wordTyp
     return;
   }
   else if (icode == CALL) { //call
-    
+    setWordInMemory(valE, valP);
+    return;
   }
   else if (icode == RET) { //ret
-    
+    *valM = getWordFromMemory(valA);
+    return;
   }
   else if (icode == PUSHQ) { //pushq
     setWordInMemory(valE, valA);
@@ -286,10 +294,12 @@ void writebackStage(int icode, wordType rA, wordType rB, wordType valE, wordType
     return;
   }
   else if (icode == CALL) { //call
-    
+    setRegister(RSP, valE);
+    return;
   }
   else if (icode == RET) { //ret
-    
+    setRegister(RSP, valE);
+    return;
   }
   else if (icode == PUSHQ) { //pushq
     setRegister(RSP, valE);
@@ -340,6 +350,7 @@ void pcUpdateStage(int icode, wordType valC, wordType valP, bool Cnd, wordType v
   }
   else if (icode == CALL) { //call
     setPC(valC);
+    return;
   }
   else if (icode == RET) { //ret
     setPC(valM);
