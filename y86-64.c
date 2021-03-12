@@ -17,7 +17,7 @@ void fetchStage(int *icode, int *ifun, int *rA, int *rB, wordType *valC, wordTyp
   }
   else if (*icode == NOP) { //No op 1 byte
     *valP = getPC() + 1;
-
+    return;
   }
   else if (*icode == RRMOVQ) { //rrmovq 2 bytes
     pcByte = getByteFromMemory(getPC() + 1);
@@ -162,6 +162,7 @@ void executeStage(int icode, int ifun, wordType valA, wordType valB, wordType va
   }
   else if (icode == MRMOVQ) { //mrmovq
     *valE = valB + valC;
+    return;
   }
   else if (icode == OPQ) { //int op
     if (ifun == ADD) {
@@ -354,6 +355,7 @@ void pcUpdateStage(int icode, wordType valC, wordType valP, bool Cnd, wordType v
   }
   else if (icode == RET) { //ret
     setPC(valM);
+    return;
   }
   else if (icode == PUSHQ) { //pushq
     setPC(valP);
