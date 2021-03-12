@@ -1,12 +1,4 @@
-0x0000: 10                     | nop
-0x0001: 10                     | nop
-0x0002: 10                     | nop
-0x0003: 10                     | nop
-0x0004: 10                     | nop
-0x0005: 10                     | nop
-0x0006: 10                     | nop
-0x0007: 10                     | nop
-0x0008: 10                     | nop
-0x0009: 10                     | nop
-0x000a: 00                     | halt            # Terminate program 
+0x0000: 30f01900000000000000   | irmovq $25, %rax
+0x000a: 10                     | nop
+0x000b: 00                     | halt
                                | 

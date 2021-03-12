@@ -7,12 +7,12 @@ const int MAX_MEM_SIZE  = (1 << 13);
 
 void fetchStage(int *icode, int *ifun, int *rA, int *rB, wordType *valC, wordType *valP) {
   //Series of if statements (icode)
-  byteType mask = 0x01;
+  byteType mask = 0x0f;
   byteType pcByte = getByteFromMemory(getPC());
   *icode = pcByte >> 4;
 
   if (*icode == HALT) { //Halt 1 byte
-    *valP = getPC() + 1;
+    setStatus(STAT_HLT);
     return;
   }
   else if (*icode == NOP) { //No op 1 byte
@@ -26,7 +26,7 @@ void fetchStage(int *icode, int *ifun, int *rA, int *rB, wordType *valC, wordTyp
   else if (*icode == IRMOVQ) { //irmovq 10 bytes
     pcByte = getByteFromMemory(getPC() + 1);
     *rA = pcByte >> 4;
-    *rB = pcByte && mask;
+    *rB = pcByte & mask;
     *valC = getWordFromMemory(getPC() + 2);
     *valP = getPC() + 10;
   }
@@ -40,7 +40,7 @@ void fetchStage(int *icode, int *ifun, int *rA, int *rB, wordType *valC, wordTyp
   }
   else if (*icode == OPQ) { //int op 2 bytes
     *valP = getPC() + 2;
-    *ifun = pcByte && mask;
+    *ifun = pcByte & mask;
 
     if (*ifun == ADD) {
 
@@ -57,7 +57,7 @@ void fetchStage(int *icode, int *ifun, int *rA, int *rB, wordType *valC, wordTyp
   }
   else if (*icode == JXX) { //jump 9 bytes
     *valP = getPC() + 9;
-    *ifun = pcByte && mask;
+    *ifun = pcByte & mask;
 
   }
   else if (*icode == CALL) { //call 9 bytes
@@ -83,7 +83,7 @@ void decodeStage(int icode, int rA, int rB, wordType *valA, wordType *valB) {
     return;
   }
   else if (icode == NOP) { //No op
-
+    return;
   }
   else if (icode == RRMOVQ) { //rrmovq
     
@@ -129,6 +129,7 @@ void executeStage(int icode, int ifun, wordType valA, wordType valB, wordType va
   }
   else if (icode == IRMOVQ) { //irmovq
     *valE = 0 + valC;
+    return;
   }
   else if (icode == RMMOVQ) { //rmmovq
     
@@ -207,6 +208,7 @@ void writebackStage(int icode, wordType rA, wordType rB, wordType valE, wordType
   }
   else if (icode == IRMOVQ) { //irmovq
     setRegister(rB, valE);
+    return;
   }
   else if (icode == RMMOVQ) { //rmmovq
     
@@ -247,6 +249,7 @@ void pcUpdateStage(int icode, wordType valC, wordType valP, bool Cnd, wordType v
   }
   else if (icode == IRMOVQ) { //irmovq
     setPC(valP);
+    return;
   }
   else if (icode == RMMOVQ) { //rmmovq
     setPC(valP);
