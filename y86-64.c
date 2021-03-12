@@ -59,9 +59,10 @@ void fetchStage(int *icode, int *ifun, int *rA, int *rB, wordType *valC, wordTyp
     return;
   }
   else if (*icode == JXX) { //jump 9 bytes
-    *valP = getPC() + 9;
     *ifun = pcByte & mask;
-
+    *valC = getWordFromMemory(getPC() +  1);
+    *valP = getPC() + 9;
+    return;
   }
   else if (*icode == CALL) { //call 9 bytes
     *valP = getPC() + 9;
@@ -116,7 +117,7 @@ void decodeStage(int icode, int rA, int rB, wordType *valA, wordType *valB) {
     return;
   }
   else if (icode == JXX) { //jump
-    
+    return;
   }
   else if (icode == CALL) { //call
     
@@ -193,7 +194,8 @@ void executeStage(int icode, int ifun, wordType valA, wordType valB, wordType va
     }
   }
   else if (icode == JXX) { //jump
-    
+    *Cnd = Cond(ifun);
+    return;
   }
   else if (icode == CALL) { //call
     
@@ -236,7 +238,7 @@ void memoryStage(int icode, wordType valA, wordType valP, wordType valE, wordTyp
     return;
   }
   else if (icode == JXX) { //jump
-    
+    return;
   }
   else if (icode == CALL) { //call
     
@@ -281,7 +283,7 @@ void writebackStage(int icode, wordType rA, wordType rB, wordType valE, wordType
     return;
   }
   else if (icode == JXX) { //jump
-    
+    return;
   }
   else if (icode == CALL) { //call
     
@@ -329,7 +331,12 @@ void pcUpdateStage(int icode, wordType valC, wordType valP, bool Cnd, wordType v
     return;
   }
   else if (icode == JXX) { //jump
-    
+    if(Cnd) {
+      setPC(valC);
+    }
+    else {
+      setPC(valP);
+    }
   }
   else if (icode == CALL) { //call
     setPC(valC);
