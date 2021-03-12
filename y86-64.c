@@ -72,12 +72,18 @@ void fetchStage(int *icode, int *ifun, int *rA, int *rB, wordType *valC, wordTyp
 
   }
   else if (*icode == PUSHQ) { //pushq 2 bytes
+    pcByte = getByteFromMemory(getPC() + 1);
+    *rA = pcByte >> 4;
+    *rB = pcByte & mask;
     *valP = getPC() + 2;
-
+    return;
   }
   else if (*icode == POPQ) { //popq 2 bytes
+    pcByte = getByteFromMemory(getPC() + 1);
+    *rA = pcByte >> 4;
+    *rB = pcByte & mask;
     *valP = getPC() + 2;
-
+    return;
   }
 }
 
@@ -119,10 +125,14 @@ void decodeStage(int icode, int rA, int rB, wordType *valA, wordType *valB) {
     
   }
   else if (icode == PUSHQ) { //pushq
-    
+    *valA = getRegister(rA);
+    *valB = getRegister(RSP);
+    return;
   }
   else if (icode == POPQ) { //popq
-    
+    *valA = getRegister(RSP);
+    *valB = getRegister(RSP);
+    return;
   }
 }
 
@@ -192,10 +202,12 @@ void executeStage(int icode, int ifun, wordType valA, wordType valB, wordType va
     
   }
   else if (icode == PUSHQ) { //pushq
-    
+    *valE = valB - 8;
+    return;
   }
   else if (icode == POPQ) { //popq
-    
+    *valE = valB + 8;
+    return;
   }
 }
 
@@ -233,10 +245,12 @@ void memoryStage(int icode, wordType valA, wordType valP, wordType valE, wordTyp
     
   }
   else if (icode == PUSHQ) { //pushq
-    
+    setWordInMemory(valE, valA);
+    return;
   }
   else if (icode == POPQ) { //popq
-    
+    *valM = getWordFromMemory(valA);
+    return;
   }
 }
 
@@ -276,10 +290,13 @@ void writebackStage(int icode, wordType rA, wordType rB, wordType valE, wordType
     
   }
   else if (icode == PUSHQ) { //pushq
-    
+    setRegister(RSP, valE);
+    return;
   }
   else if (icode == POPQ) { //popq
-    
+    setRegister(RSP, valE);
+    setRegister(rA, valM);
+    return;
   }
 }
 
@@ -322,9 +339,11 @@ void pcUpdateStage(int icode, wordType valC, wordType valP, bool Cnd, wordType v
   }
   else if (icode == PUSHQ) { //pushq
     setPC(valP);
+    return;
   }
   else if (icode == POPQ) { //popq
     setPC(valP);
+    return;
   }
 }
 
